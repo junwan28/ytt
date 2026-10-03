@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#120a24">
+<title>Untuk Veronica Aurellya ♡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night1:#0d0620; --night2:#1d0f3d; --dark:#3b1c6e; --purple:#8e5fd6;
+  --soft:#b794f4; --lav:#e6d9ff; --pink:#f3c6ff;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--night1);color:var(--lav);font-family:'Poppins',sans-serif}
+body{background:radial-gradient(120% 90% at 50% 0%,var(--night2) 0%,var(--night1) 70%)}
+canvas#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+
+/* kelopak jatuh */
+.petal{position:fixed;top:-10vh;z-index:1;pointer-events:none;width:var(--s);height:calc(var(--s)*1.35);
+  background:radial-gradient(circle at 30% 25%,#e6d2ff,#a97be8 55%,#6b3fb5);border-radius:80% 0 80% 0;opacity:.8;
+  animation:fall var(--d) linear var(--l) infinite}
+@keyframes fall{
+  0%{transform:translate3d(0,0,0) rotate(0)}
+  50%{transform:translate3d(var(--dx),55vh,0) rotate(calc(var(--r)*.5))}
+  100%{transform:translate3d(calc(var(--dx)*-.6),112vh,0) rotate(var(--r))}
+}
+/* ornamen bunga sudut */
+.flower{position:fixed;z-index:1;width:150px;height:150px;pointer-events:none;opacity:.35;animation:spin 90s linear infinite}
+.f1{top:-55px;left:-55px}.f2{top:-55px;right:-55px;animation-direction:reverse}
+.f3{bottom:-55px;left:-55px;animation-direction:reverse}.f4{bottom:-55px;right:-55px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* layar pembuka */
+#intro{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+  text-align:center;padding:24px;background:radial-gradient(100% 80% at 50% 40%,rgba(59,28,110,.55),rgba(13,6,32,.96));
+  transition:opacity 1.4s ease,visibility 1.4s}
+#intro.hide{opacity:0;visibility:hidden}
+#intro p{font-family:'Dancing Script',cursive;font-size:clamp(1.7rem,7vw,2.6rem);color:var(--lav);text-shadow:0 0 18px var(--purple)}
+.btn{font-family:'Poppins',sans-serif;font-weight:300;letter-spacing:.06em;color:var(--lav);background:rgba(142,95,214,.18);
+  border:1px solid var(--soft);border-radius:999px;padding:13px 30px;font-size:1rem;cursor:pointer;
+  box-shadow:0 0 22px rgba(142,95,214,.45);transition:transform .2s,background .3s}
+.btn:active{transform:scale(.95);background:rgba(142,95,214,.4)}
+.btn:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+
+/* konten utama */
+#main{position:fixed;inset:0;z-index:2;opacity:0;transition:opacity 2s ease;pointer-events:none}
+#main.show{opacity:1;pointer-events:auto}
+header{position:absolute;top:calc(env(safe-area-inset-top,0px) + 4.5vh);left:0;right:0;text-align:center;padding:0 16px}
+header h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.7rem,8vw,3rem);letter-spacing:.02em;
+  background:linear-gradient(90deg,var(--lav),var(--soft),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 14px rgba(183,148,244,.55))}
+header h2{font-family:'Dancing Script',cursive;font-weight:500;font-size:clamp(1.5rem,6.5vw,2.2rem);color:var(--soft);margin-top:2px}
+
+#card{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 82px);
+  width:min(92vw,560px);max-height:40vh;overflow-y:auto;padding:20px 22px;border-radius:22px;
+  background:linear-gradient(160deg,rgba(59,28,110,.55),rgba(29,15,61,.7));border:1px solid rgba(183,148,244,.3);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 10px 40px rgba(0,0,0,.45),0 0 30px rgba(142,95,214,.2);
+  text-align:center}
+#card p{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;font-size:clamp(.95rem,3.9vw,1.12rem);line-height:1.75;margin-bottom:12px;color:var(--lav)}
+#card p.sig{font-family:'Dancing Script',cursive;font-style:normal;font-size:1.6rem;text-align:right;color:var(--pink);margin:0}
+#card .btn{margin-top:10px;font-size:.9rem;padding:9px 22px}
+#card .caret::after{content:"|";margin-left:2px;animation:blink 1s steps(2) infinite;color:var(--soft)}
+@keyframes blink{50%{opacity:0}}
+
+/* tombol musik */
+#music{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);
+  width:54px;height:54px;border-radius:50%;border:1px solid var(--soft);cursor:pointer;color:#fff;font-size:1.3rem;
+  background:radial-gradient(circle at 30% 25%,var(--soft),var(--purple) 55%,var(--dark));box-shadow:0 0 22px rgba(142,95,214,.7);
+  display:flex;align-items:center;justify-content:center;transition:transform .2s}
+#music:active{transform:translateX(-50%) scale(.92)}
+#music:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+#music.playing{animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 36px rgba(183,148,244,.95)}}
+#toast{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 80px);transform:translateX(-50%);
+  font-size:.75rem;background:rgba(13,6,32,.85);padding:6px 12px;border-radius:10px;opacity:0;transition:opacity .4s;pointer-events:none;white-space:nowrap}
+#toast.on{opacity:1}
+
+@media (prefers-reduced-motion:reduce){.petal,.flower{animation:none}}
+</style>
+</head>
+<body>
+
+<canvas id="sky"></canvas>
+
+<!-- ornamen bunga ungu -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <radialGradient id="pg" cx="50%" cy="85%" r="80%"><stop offset="0" stop-color="#6b3fb5"/><stop offset="1" stop-color="#d9c2ff"/></radialGradient>
+    <symbol id="flower" viewBox="-50 -50 100 100">
+      <g fill="url(#pg)" stroke="#e6d9ff" stroke-opacity=".5" stroke-width=".6">
+        <ellipse cx="0" cy="-26" rx="10" ry="22"/>
+        <ellipse cx="0" cy="-26" rx="10" ry="22" transform="rotate(45)"/>
+        <ellipse cx="0" cy="-26" rx="10" ry="22" transform="rotate(90)"/>
+        <ellipse cx="0" cy="-26" rx="10" ry="22" transform="rotate(135)"/>
+        <ellipse cx="0" cy="-26" rx="10" ry="22" transform="rotate(180)"/>
+        <ellipse cx="0" cy="-26" rx="10" ry="22" transform="rotate(225)"/>
+        <ellipse cx="0" cy="-26" rx="10" ry="22" transform="rotate(270)"/>
+        <ellipse cx="0" cy="-26" rx="10" ry="22" transform="rotate(315)"/>
+      </g>
+      <circle r="7" fill="#f3c6ff"/>
+    </symbol>
+  </defs>
+</svg>
+<svg class="flower f1"><use href="#flower"/></svg>
+<svg class="flower f2"><use href="#flower"/></svg>
+<svg class="flower f3"><use href="#flower"/></svg>
+<svg class="flower f4"><use href="#flower"/></svg>
+
+<div id="petals"></div>
+
+<!-- layar pembuka -->
+<div id="intro">
+  <p>Ada sesuatu yang kusiapkan<br>khusus untukmu ✦</p>
+  <button class="btn" id="open">Buka kejutan ♡</button>
+</div>
+
+<!-- konten -->
+<div id="main">
+  <header>
+    <h1>Veronica Aurellya</h1>
+    <h2>my princess</h2>
+  </header>
+  <div id="card" aria-live="polite"></div>
+  <button id="music" aria-label="Putar atau jeda musik">♪</button>
+  <div id="toast"></div>
+</div>
+
+<!--
+  ====== MASUKKAN LAGU DI SINI ======
+  Ganti nilai src dengan link langsung file mp3 (misal dari hosting sendiri),
+  atau taruh file mp3 sefolder dengan HTML ini lalu isi, contoh: src="a-thousand-years.mp3"
+  Contoh lagu: "A Thousand Years - Christina Perri" / "Until I Found You - Stephen Sanchez"
+-->
+<audio id="bgm" loop preload="auto" src="GANTI_DENGAN_LINK_LAGU_A_THOUSAND_YEARS.mp3"></audio>
+
+<script>
+/* ---------- Pesan ---------- */
+const MESSAGES = [
+  {
+    paras: [
+      "Dari miliaran doa yang pernah kuterbangkan ke langit, kau adalah satu-satunya jawaban yang paling indah. Aku mencintaimu, lebih dari apa pun yang mampu dijelaskan oleh kata-kata.",
+      "Seberat apa pun harimu, ingatlah bahwa kau tidak pernah sendirian. Ada aku di sini yang akan selalu memihakmu, menjadikanmu prioritas, dan menjadikan kebahagiaanmu sebagai tujuanku."
+    ],
+    sig: "-wan",
+    next: "Lanjut ♡"
+  },
+  {
+    paras: [
+      "Jika waktu bisa dibekukan, aku akan menghentikannya tepat saat kau tersenyum menatapku. Karena bagiku, tidak ada pemandangan di dunia ini yang lebih menenangkan dari kehadiranmu di sisiku."
+    ],
+    sig: "-wan",
+    next: "Baca dari awal ↺",
+    loop: true
+  }
+];
+
+/* ---------- Kelopak jatuh ---------- */
+(function(){
+  const box = document.getElementById('petals');
+  const n = window.innerWidth < 600 ? 16 : 26;
+  for(let i=0;i<n;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.setProperty('--s', (9 + Math.random()*13) + 'px');
+    p.style.setProperty('--d', (10 + Math.random()*10) + 's');
+    p.style.setProperty('--l', (-Math.random()*18) + 's');
+    p.style.setProperty('--dx', ((Math.random()-.5)*160) + 'px');
+    p.style.setProperty('--r', ((Math.random()>.5?1:-1)*(240+Math.random()*360)) + 'deg');
+    box.appendChild(p);
+  }
+})();
+
+/* ---------- Rasi bintang berbentuk hati ---------- */
+(function(){
+  const cv = document.getElementById('sky'), ctx = cv.getContext('2d');
+  let W, H, dpr, cx, cy, S, link;
+  const heart = t => [16*Math.pow(Math.sin(t),3),
+    -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t))];
+
+  const N = window.innerWidth < 600 ? 95 : 150;
+  const stars = [], bg = [];
+  for(let i=0;i<N;i++){
+    const outline = i < N*0.62;
+    const t = (i/(N*0.62))*Math.PI*2;
+    const k = outline ? 1 : 0.2 + Math.random()*0.7;      // bintang isi di dalam hati
+    const a = outline ? t : Math.random()*Math.PI*2;
+    stars.push({a, k, x:Math.random(), y:Math.random(), ph:Math.random()*6.28, sp:.3+Math.random()*.5, r:1+Math.random()*1.4, ready:false});
+  }
+  for(let i=0;i<70;i++) bg.push({x:Math.random(), y:Math.random(), r:Math.random()*1.1+.2, ph:Math.random()*6.28});
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio||1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W*dpr; cv.height = H*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cx = W/2; cy = H*0.33;
+    S = Math.min(W*0.72/34, H*0.27/30);
+    link = Math.max(48, S*7.5);
+  }
+  addEventListener('resize', resize); resize();
+
+  let start = performance.now(), formStart = null;
+  window.formHeart = () => { formStart = performance.now(); };
+
+  function frame(now){
+    const t = (now - start)/1000;
+    ctx.clearRect(0,0,W,H);
+
+    // bintang latar berkelip
+    for(const b of bg){
+      ctx.globalAlpha = .25 + .45*Math.abs(Math.sin(t*.8 + b.ph));
+      ctx.fillStyle = '#e6d9ff';
+      ctx.beginPath(); ctx.arc(b.x*W, b.y*H, b.r, 0, 6.283); ctx.fill();
+    }
+
+    // seberapa jauh hati sudah terbentuk (0 → 1 perlahan)
+    const form = formStart ? Math.min(1, (now-formStart)/9000) : 0;
+    const ease = form*form*(3-2*form);
+    const beat = 1 + 0.025*Math.sin(t*2.2);
+
+    for(const s of stars){
+      const [hx,hy] = heart(s.a);
+      const tx = cx + hx*S*s.k*beat + Math.sin(t*s.sp + s.ph)*5;
+      const ty = cy + hy*S*s.k*beat + Math.cos(t*s.sp*.9 + s.ph)*5;
+      const fx = s.x*W + Math.sin(t*s.sp*.6 + s.ph)*18;   // posisi melayang bebas
+      const fy = s.y*H + Math.cos(t*s.sp*.5 + s.ph)*18;
+      s.px = fx + (tx-fx)*ease;
+      s.py = fy + (ty-fy)*ease;
+    }
+
+    // garis penghubung (rasi)
+    ctx.lineWidth = 1;
+    for(let i=0;i<N;i++){
+      const a = stars[i];
+      for(let j=i+1;j<N;j++){
+        const b = stars[j], dx = a.px-b.px, dy = a.py-b.py, d = Math.hypot(dx,dy);
+        if(d < link){
+          ctx.strokeStyle = `rgba(183,148,244,${(1-d/link)*(.2+.45*ease)})`;
+          ctx.beginPath(); ctx.moveTo(a.px,a.py); ctx.lineTo(b.px,b.py); ctx.stroke();
+        }
+      }
+    }
+    // bintang
+    for(const s of stars){
+      const tw = .6 + .4*Math.sin(t*1.6 + s.ph);
+      ctx.globalAlpha = tw;
+      ctx.shadowColor = '#b794f4'; ctx.shadowBlur = 10;
+      ctx.fillStyle = '#f3e8ff';
+      ctx.beginPath(); ctx.arc(s.px, s.py, s.r, 0, 6.283); ctx.fill();
+    }
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ---------- Typewriter ---------- */
+const card = document.getElementById('card');
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+let runId = 0, skip = false;
+card.addEventListener('click', () => { skip = true; });
+
+async function typeInto(el, text, id){
+  el.classList.add('caret');
+  for(const ch of text){
+    if(id !== runId) return;
+    el.textContent += ch;
+    card.scrollTop = card.scrollHeight;
+    await sleep(skip ? 0 : 38);
+  }
+  el.classList.remove('caret');
+}
+
+async function showMessage(i){
+  const id = ++runId; skip = false;
+  const m = MESSAGES[i];
+  card.innerHTML = '';
+  for(const txt of m.paras){
+    const p = document.createElement('p'); card.appendChild(p);
+    await typeInto(p, txt, id);
+    if(id !== runId) return;
+    await sleep(skip ? 0 : 500);
+  }
+  const sg = document.createElement('p'); sg.className = 'sig'; card.appendChild(sg);
+  await typeInto(sg, m.sig, id);
+  if(id !== runId) return;
+  const b = document.createElement('button');
+  b.className = 'btn'; b.textContent = m.next;
+  const wrap = document.createElement('div'); wrap.style.textAlign = 'center'; wrap.appendChild(b);
+  card.appendChild(wrap);
+  card.scrollTop = card.scrollHeight;
+  b.onclick = () => showMessage(m.loop ? 0 : i+1);
+}
+
+/* ---------- Musik ---------- */
+const bgm = document.getElementById('bgm'), mbtn = document.getElementById('music'), toast = document.getElementById('toast');
+function say(t){ toast.textContent = t; toast.classList.add('on'); setTimeout(()=>toast.classList.remove('on'), 2600); }
+function setIcon(){ mbtn.textContent = bgm.paused ? '♪' : '❚❚'; mbtn.classList.toggle('playing', !bgm.paused); }
+async function toggleMusic(){
+  try{
+    if(bgm.paused) await bgm.play(); else bgm.pause();
+  }catch(e){ say('Lagu belum diisi di tag <audio>'); }
+  setIcon();
+}
+mbtn.addEventListener('click', toggleMusic);
+bgm.addEventListener('error', () => say('Lagu belum diisi di tag <audio>'));
+
+/* ---------- Buka kejutan ---------- */
+document.getElementById('open').addEventListener('click', async () => {
+  document.getElementById('intro').classList.add('hide');
+  document.getElementById('main').classList.add('show');
+  try{ await bgm.play(); }catch(e){}   // dipicu klik, jadi biasanya diizinkan di HP
+  setIcon();
+  window.formHeart();
+  setTimeout(() => showMessage(0), 1800);
+});
+</script>
+</body>
+</html>
